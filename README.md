@@ -6,5 +6,4 @@ Very much a WIP.
 
 TODO:
 
-- Implement file cleanup on error for the temp files from the compiler driver.
-- Handle --lex, --parse, and --codegen flags with clap rather than whatever i'm doing.
+- Start building the lexer

@@ -1,55 +1,49 @@
-use std::env;
-use std::fs;
-use std::io::{Error, ErrorKind};
+use anyhow::{Result, bail};
+use clap::Parser;
 use std::process::Command;
+use tempfile::NamedTempFile;
 
-fn main() -> Result<(), std::io::Error> {
-    let args: Vec<String> = env::args().collect();
+#[derive(Parser)]
+#[command(name = "crab")]
+struct Args {
+    #[arg(help = "Source c file to compile")]
+    source_file: String,
 
-    let mut lex_flag = false;
-    let mut parse_flag = false;
-    let mut codegen_flag = false;
-    let mut file: Option<&str> = None;
+    #[arg(long)]
+    lex: bool,
 
-    for arg in args.iter().skip(1) {
-        match arg.as_str() {
-            "--lex" => lex_flag = true,
-            "--parse" => parse_flag = true,
-            "--codegen" => codegen_flag = true,
-            _ => file = Some(&arg),
-        }
-    }
+    #[arg(long)]
+    parse: bool,
 
-    let Some(file_name) = file else {
-        return Err(Error::new(
-            ErrorKind::InvalidInput,
-            "No source file provided.",
-        ));
-    };
+    #[arg(long)]
+    codegen: bool,
+}
+
+fn main() -> Result<()> {
+    let args = Args::parse();
+    let source_file = &args.source_file;
 
     // Runs preprocessor
-    let preprocessor_file_path = "./temp.i";
+    let preprocessor_file = NamedTempFile::new()?;
+    let preprocessor_file_path = preprocessor_file.path();
     let preprocessor_status = Command::new("gcc")
         .arg("-E") // Run only preprocessor
         .arg("-P") // No linemarkers
-        .arg(file_name)
+        .arg(source_file)
         .arg("-o")
         .arg(preprocessor_file_path)
         .status()?;
 
     if !preprocessor_status.success() {
-        return Err(Error::new(
-            ErrorKind::Other,
-            "Preprocessor failed at runtime.",
-        ));
+        bail!("Preprocessing failed at runtime.");
     }
 
     // Runs compiler (TODO)
-    let assembly_file_path = "./temp.s";
-    fs::remove_file(preprocessor_file_path)?;
+    let assembly_file = NamedTempFile::new()?;
+    let assembly_file_path = assembly_file.path();
 
     // Runs linker
-    let output_file = file_name.strip_suffix(".c").unwrap_or(file_name);
+    let output_file = source_file.strip_suffix(".c").unwrap_or(source_file);
     let linker_status = Command::new("gcc")
         .arg(assembly_file_path)
         .arg("-o")
@@ -57,10 +51,8 @@ fn main() -> Result<(), std::io::Error> {
         .status()?;
 
     if !linker_status.success() {
-        return Err(Error::new(ErrorKind::Other, "Linking failed at runtime."));
+        bail!("Linking failed at runtime.");
     }
-
-    fs::remove_file(assembly_file_path)?;
 
     Ok(())
 }
