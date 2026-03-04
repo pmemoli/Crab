@@ -3,7 +3,4 @@ C compiler written in Rust based on Sandler Nora's book "Writing a C Compiler". 
 Very much a WIP.
 
 TODO:
-
-- Test the lexer
-- Write the "compile" wrapper to implement the flag functionality for testing
-- Make the lexer return Result<Vec<Token>> rather than just Vec<Token>
+- Make the lexer return Result<Vec<Token>> rather than just Vec<Token> to process lexical errors

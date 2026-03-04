@@ -59,6 +59,7 @@ pub fn lexical_analysis(content: &str) -> Vec<Token> {
 
         // Select the maximum token by lexicographic order
         let max_match = *token_matches.iter().max().unwrap();
+
         i += max_match.0.len();
 
         let mut token = Token {
