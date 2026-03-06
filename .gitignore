@@ -1,3 +1,5 @@
 Cargo.lock
-/build
-/target
+c/
+build/
+target/
+tests/

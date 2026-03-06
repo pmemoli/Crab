@@ -4,3 +4,6 @@ Very much a WIP.
 
 TODO:
 - Make the lexer return Result<Vec<Token>> rather than just Vec<Token> to process lexical errors
+
+# ASDL definitions
+Using Zephyr Abstract Syntax Description Language (ASDL) to specify the ast.

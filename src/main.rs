@@ -5,6 +5,7 @@ use std::process::Command;
 use tempfile::NamedTempFile;
 
 mod lexer;
+mod parser;
 
 #[derive(Parser)]
 #[command(name = "crab")]
@@ -41,24 +42,24 @@ fn main() -> Result<()> {
         bail!("Preprocessing failed at runtime.");
     }
 
-    // Runs compiler (TODO)
+    // Runs compiler
     let content = fs::read_to_string(preprocessor_file_path)?;
     compile(&content, args.lex, args.parse, args.codegen);
 
-    let assembly_file = NamedTempFile::new()?;
-    let assembly_file_path = assembly_file.path();
-
-    // Runs linker
-    let output_file = source_file.strip_suffix(".c").unwrap_or(source_file);
-    let linker_status = Command::new("gcc")
-        .arg(assembly_file_path)
-        .arg("-o")
-        .arg(output_file)
-        .status()?;
-
-    if !linker_status.success() {
-        bail!("Linking failed at runtime.");
-    }
+    // let assembly_file = NamedTempFile::new()?;
+    // let assembly_file_path = assembly_file.path();
+    //
+    // // Runs linker
+    // let output_file = source_file.strip_suffix(".c").unwrap_or(source_file);
+    // let linker_status = Command::new("gcc")
+    //     .arg(assembly_file_path)
+    //     .arg("-o")
+    //     .arg(output_file)
+    //     .status()?;
+    //
+    // if !linker_status.success() {
+    //     bail!("Linking failed at runtime.");
+    // }
 
     Ok(())
 }
