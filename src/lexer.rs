@@ -13,6 +13,9 @@ pub enum Token {
     OpenBrace,
     CloseBrace,
     Semicolon,
+    Tilde,
+    Hyphen,
+    TwoHyphens,
 }
 
 pub fn lexical_analysis(content: &str) -> VecDeque<Token> {
@@ -33,6 +36,9 @@ pub fn lexical_analysis(content: &str) -> VecDeque<Token> {
         (Regex::new(r"^\{").unwrap(), |_| Token::OpenBrace),
         (Regex::new(r"^\}").unwrap(), |_| Token::CloseBrace),
         (Regex::new(r"^;").unwrap(), |_| Token::Semicolon),
+        (Regex::new(r"^~").unwrap(), |_| Token::Tilde),
+        (Regex::new(r"^-").unwrap(), |_| Token::Hyphen),
+        (Regex::new(r"^--").unwrap(), |_| Token::TwoHyphens),
     ];
 
     let mut i = 0;

@@ -3,4 +3,5 @@ C compiler written in Rust based on Sandler Nora's book "Writing a C Compiler". 
 Very much a WIP.
 
 TODO:
+- Write parser for unary expressions.
 - Make lexer and parser work with Result's rather than just panicking for errors.

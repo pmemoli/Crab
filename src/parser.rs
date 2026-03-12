@@ -5,13 +5,15 @@ use std::collections::VecDeque;
 // program = Program(function_definition)
 // function_definition = Function(identifier name, statement body)
 // statement = Return(exp)
-// exp = Constant(int)
+// exp = Constant(int) | Unary(unary_operator, exp)
+// unary_operator = Complement | Negate
 
 // Formal Grammar
 // <program> ::= <function>
 // <function> ::= "int" <identifier> "(" "void" ")" "{" <statement> "}"
 // <statement> ::= "return" <exp> ";"
-// <exp> ::= <int>
+// <exp> ::= <int> | <unop> <exp> | "(" <exp> ")"
+// <unop> ::= "-" | "~"
 // <identifier> ::= ? An identifier token ?
 // <int> ::= ? A constant token ?
 
@@ -29,6 +31,13 @@ pub enum Statement {
 #[derive(Debug)]
 pub enum Expr {
     Constant(i32),
+    Unary(UnaryOperator, Box<Expr>),
+}
+
+#[derive(Debug)]
+pub enum UnaryOperator {
+    Complement,
+    Negate,
 }
 
 fn expect(expected: Token, tokens: &mut VecDeque<Token>) {
