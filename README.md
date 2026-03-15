@@ -3,7 +3,7 @@ C compiler written in Rust based on Sandler Nora's book "Writing a C Compiler". 
 Very much a WIP.
 
 TODO:
-- Finish the tacky generation and properly get a feel for it.
+- Get a proper feel for TACKY and how its converted. Also the passes.
 - Make lexer and parser work with Result's rather than just panicking for errors.
 
 ## AST Specification

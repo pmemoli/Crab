@@ -58,13 +58,14 @@ fn main() -> Result<()> {
     }
 
     let ast = crate::parser::parse_program(&mut tokens);
-    println!("{:#?}", ast);
 
     if args.parse {
         return Ok(());
     }
 
-    // tacky generation
+    let tacky_ast = crate::tacky::ast_program_to_tacky(&ast);
+
+    println!("{:#?}", tacky_ast);
 
     if args.tacky {
         return Ok(());
